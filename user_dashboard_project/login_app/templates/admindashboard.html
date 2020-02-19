@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Manage Users</h1>
+    <a href="/users/edit">Edit your profile!</a>
+    <br>
+    <a href="/logout">Click here to Logout!</a>
+    <br>
+    <a href="/users/new">Add a New User!</a>
+    <br>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>DATE CREATED</th>
+            <th>USER LEVEL</th>
+            <th>Actions</th>
+        </tr>
+        {% for each in users%}
+            <tr>
+                <th>{{each.id}}</th>
+                <th><a href="/users/show/{{each.id}}">{{each.first_name}}</a></th>
+                <th>{{each.created_at}}</th>
+                <th>
+                    {% if each.user_level == 0 %} Normal {% endif %}
+                    {%if each.user_level == 9 %} Admin {% endif %}
+                </th>
+                <th>
+                    <a href = "/users/edit/{{each.id}}">Edit</a>
+                    <a href = "/users/delete/{{each.id}}">Remove</a>
+                </th>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

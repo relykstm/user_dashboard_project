@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>User Information</title>
+</head>
+<body>
+    <a href="/dashboardroute">Back to your dashboard!</a>
+    <h1>{{user.first_name}} {{user.last_name}}</h1>
+    <p>User ID: {{user.id}}</p>
+    <p>Email: {{user.email}}</p>
+    <p>Description: {{user.desc}}</p>
+    <p>Registered at: {{user.created_at}}</p>
+    <br>
+    <p>Leave a message for {{user.first_name}}</p>
+    <form action = "/submitpost" method = "POST">
+        {% csrf_token %}
+        <textarea name ='note'></textarea>
+        <input type="hidden" name="pageowner" value="{{user.id}}">
+        <button type="submit">Post on {{user.first_name}}!</button>
+    </form>
+    {% for each in user.messages.all %}
+        <p>{{each.created_by2.first_name}} Posted: <textarea>{{each.note}}</textarea></p>
+
+        {% for every in each.comments.all %}
+
+
+            <p>{{every.created_by2.first_name}} Commented: <textarea>{{every.comment}}</textarea></p>
+        {% endfor %}
+    
+        <form action = "/submitcomment" method = "POST">
+            {% csrf_token %}
+            <input type="hidden" name="thismessage" value="{{each.id}}">
+            <textarea name = 'commenttext'></textarea>
+            <input type="hidden" name="pageowner" value="{{user.id}}">
+            <button type="submit">Comment on this post!</button>
+        </form>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">  
+    <title>Login</title>
+</head>
+<body>
+    <a href="/" a>Home</a>
+    <h1>Registration</h1>
+    <form action = "/register_new_user" method = "POST">
+        {% csrf_token %}
+        First Name: <input type ="text" name="first">
+        Last Name: <input type ="text" name="last">
+        Date of Birth: <input type="date" name='date'>
+        Email: <input type ="text" name="email">
+        Password: <input type ="password" name="password">
+        Confirm PW: <input type ="password" name="confirm">
+        <button type="submit">Register</button>
+    </form>
+
+    {% if messages %}
+        <ul class="messages">    
+            {% for message in messages %}    
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <a href ="/signin">Already to have an account? Click here to signin.</a>
+</body>
+</html>

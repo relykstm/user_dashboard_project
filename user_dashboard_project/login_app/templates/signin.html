@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+</head>
+<body>
+    <a href="/" a>Home</a>
+    <h1>Login:</h1>
+    <form action = "/login_user" method = "POST">
+        {% csrf_token %}
+        Email: <input type ="text" name="email">
+        Password: <input type ="password" name="password">
+        <button type="submit">Login</button>
+    </form>
+    {% if messages %}
+        <ul class="messages">    
+            {% for message in messages %}    
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+            {% endfor %}
+        </ul>
+    {% endif %} 
+    <a href="/register">Dont have an account? Click here to register.</a>
+</body>
+</html>

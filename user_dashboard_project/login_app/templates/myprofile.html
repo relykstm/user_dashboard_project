@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Edit Profile</title>
+</head>
+<body>
+    <a href="/dashboardroute">Back to your dashboard!</a>
+    <br>
+    <a href="/logout">Click here to Logout!</a>
+    <br>
+    <p>Update your Information:</p>
+    <form action="/updateinformation" method="post">
+        {% csrf_token %}
+        <p>Email<input type="text" name="email"></p>
+        <p>First Name:<input type="text" name="firstname"></p>
+        <p>Last Name:<input type="text" name="lastname"></p>
+        <button type="submit">Save Information</button>
+    </form>
+    <br>
+    <p>Update your Password:</p>
+    <form action="/users/updatepassword/{{user.id}}" method="post">
+        {% csrf_token %}
+        <input type="password" name='password'>
+        <input type="password" name='confirm'>
+        <button type="submit">Update Password</button>
+    </form>
+    <br>
+    <p>Update your Description:</p>
+    <form action="/updatemydescription" method="post">
+        {% csrf_token %}
+        <textarea name='description'></textarea>
+        <button type="submit">Save Description</button>
+    </form>
+</body>
+</html>

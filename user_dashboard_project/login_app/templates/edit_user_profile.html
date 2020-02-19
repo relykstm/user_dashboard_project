@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Edit a User's Profile</title>
+</head>
+<body>
+    <br>
+    <a href="/dashboardroute">Back to your dashboard!</a>
+    <br>
+    <form action="/edituserinfo/{{user_profile.id}}" method = "POST">
+        {% csrf_token %}
+    <h1>Edit User: ID#{{user_profile.id}}</h1>
+    <p>Edit Info:</p>
+    <p>Email:</p>
+    <input type='text' name="email">
+    <p>First Name:</p>
+    <input type='text' name='firstname'>
+    <p>Last Name:</p>
+    <input type='text' name='lastname'>
+    <br>
+    <p>User Level:</p>
+    <select name = 'userlevel'>
+        <option>Admin</option>
+        <option>Normal</option>
+    </select>
+    <br>
+    <br>
+    <button type="submit">Save Changes!</button>
+    </form>
+    <form action="/users/updatepassword/{{user_profile.id}}" method = "POST">
+        {% csrf_token %}
+        <p>Change Password:</p>
+        <input type="password" name="password">
+        <input type='password' name="confirm">
+        <button type="submit">Change Password!</button>
+    </form>
+</body>
+</html>

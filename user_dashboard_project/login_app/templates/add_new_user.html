@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add User</title>
+</head>
+<body>
+    <a href="/dashboardroute">Back to your dashboard!</a>
+    <br>
+    <h1>Add a new user:</h1>
+    <form action = "/users/admin_create_user" method ="POST">
+        {% csrf_token %}
+        <p>Email:</p>
+        <input type="text" name="email">
+        <p>First Name:</p>
+        <input type="text" name="first">
+        <p>Last Name:</p>
+        <input type="text" name="last">
+        <p>Date of Birth:</p>
+        <input type="date" name='date'>
+        <p>Password:</p>
+        <input type="password" name="password">
+        <p>Confirm Password:</p>
+        <input type="password" name="confirm">
+        <br>
+        <button type="submit">Create new user!</button>
+    </form>
+    {% if messages %}
+        <ul class="messages">    
+            {% for message in messages %}    
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
