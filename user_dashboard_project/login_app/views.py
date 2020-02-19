@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import *
 from django.contrib import messages
 import bcrypt
+from datetime import datetime, timedelta, timezone
 
 def home(request):
     return render(request, 'home.html')
@@ -175,3 +176,10 @@ def edit_user_info(request, id):
         this_user.user_level = 0
     this_user.save()
     return redirect('/dashboardroute')
+
+
+# this_message = Message.objects.get(id=id)
+# age_check = datetime.now().replace(tzinfo=timezone.utc) - timedelta(minutes=30)
+
+# if this_message.created_at > age_check:
+#     this.message.delete()
