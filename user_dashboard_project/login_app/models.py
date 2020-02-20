@@ -26,8 +26,6 @@ class UserManager(models.Manager):
         year, month, day = [int(f) for f in birth.split('-')]
         today = strftime("%Y-%m-%d", localtime())
         year2, month2, day2 = [int(f) for f in today.split('-')]
-        print(year)
-        print(year2)
         if (year2 - year) < 13:
             errors['date'] = "You must be 13 years old to register(COPPA)"
         return errors
@@ -50,6 +48,7 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
     user = models.ForeignKey(User, related_name="messages", on_delete = models.CASCADE)
+    formatted_time = models.TextField(default = "99")
 
 class Comment(models.Model):
     comment = models.TextField()

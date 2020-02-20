@@ -23,5 +23,4 @@ urlpatterns = [
     path('updateinformation', views.update_my_info),
     path('submitpost', views.add_new_post),
     path('submitcomment', views.add_new_comment)
-    
 ] 

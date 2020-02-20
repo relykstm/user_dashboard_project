@@ -23,5 +23,12 @@
         </ul>
     {% endif %} 
     <a href="/register">Dont have an account? Click here to register.</a>
+    {% if messages %}
+        <ul class="messages">    
+            {% for message in messages %}
+                {% if message.extra_tags == 'email' %}<li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>{% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %} 
 </body>
 </html>

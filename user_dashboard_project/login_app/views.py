@@ -35,7 +35,7 @@ def register(request):
     errors = User.objects.basic_validation(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():
-            messages.error(request, value)
+            messages.error(request, value, extra_tags = key)
         return redirect('/signin')
     else:
         password = request.POST['password']
@@ -66,11 +66,8 @@ def login_check(request):
     return redirect('/')
 
 def logout(request):
-    try:
-        del request.session['userid']
-        return redirect('/')
-    except:
-        return redirect('/')
+    request.session.clear()
+    return redirect('/')
 
 def edit_own_profile(request):
     context = {
@@ -85,16 +82,40 @@ def which_dashboard(request):
         return redirect('/dashboard')
 
 def edit_a_profile(request, id):
+    if 'userid' not in request.session:
+        return redirect('/')
+    this_user = User.objects.get(id= request.session['userid'])
+    if this_user.user_level != 9:
+        return redirect('/')
     context = {
         'user_profile': User.objects.get(id=id)
     }
     return render(request, 'edit_user_profile.html', context)
 
 def show_a_profile(request, id):
+    if 'userid' not in request.session:
+        return redirect('/')
     this_user = User.objects.get(id=id)
+    all_posts = Message.objects.filter(user = this_user)
+    for posts in all_posts:
+        time_since = datetime.now().replace(tzinfo=timezone.utc) - posts.created_at
+        time_since = time_since.total_seconds() // 60
+        if time_since < 60:
+            posts.formatted_time = f"{int(time_since)} minutes ago"
+        elif time_since < 1440:
+            time_since = time_since // 60
+            posts.formatted_time = f"{int(time_since)} hours ago"
+        elif time_since < 10080:
+            time_since = time_since // 1440
+            posts.formatted_time = f"{int(time_since)} days ago"
+        else:
+            posts.formatted_time = posts.created_at
+        posts.save()
+
     context = {
-        'user': this_user
+        'user': this_user,
     }
+
     return render(request, 'show_user_profile.html', context)
 
 def create_new_user_page(request):
@@ -105,7 +126,7 @@ def admin_create_user(request):
     errors = User.objects.basic_validation(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():
-            messages.error(request, value)
+            messages.error(request, value, extra_tags = key)
         return redirect('/dashboard/admin')
     else:
         password = request.POST['password']
@@ -130,7 +151,7 @@ def update_password(request, id):
             errors['confirm'] = "Password and confirmed password did not match."
     if len(errors) > 0:
         for key, value in errors.items():
-            messages.error(request, value)
+            messages.error(request, value, extra_tags = key)
         return redirect('/')
     password = request.POST['password']
     pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
@@ -179,7 +200,26 @@ def edit_user_info(request, id):
 
 
 # this_message = Message.objects.get(id=id)
-# age_check = datetime.now().replace(tzinfo=timezone.utc) - timedelta(minutes=30)
+
 
 # if this_message.created_at > age_check:
 #     this.message.delete()
+
+# hour_check = datetime.now().replace(tzinfo=timezone.utc) - timedelta(hours=1)
+
+# posts_older_than_1_hour = posts.objects.filter(created_at__gte, hour_check)
+
+# for posts in posts_older_than_1_hour:
+#     posts.formatted_time = strftime("%I:%M %p", posts.created_at)
+#     posts.objects.save()
+
+#     context = {
+#         'hour_posts':posts_older_than_1_hour
+#     }
+
+
+#     {{posts.formatted_time}}
+
+#     context = {
+#         hourposts: posts.objects.filter(created_at__gte, hour_check)
+#     }

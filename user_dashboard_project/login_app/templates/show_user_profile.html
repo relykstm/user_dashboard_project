@@ -23,6 +23,7 @@
     </form>
     {% for each in user.messages.all %}
         <p>{{each.created_by2.first_name}} Posted: <textarea>{{each.note}}</textarea></p>
+        <p>Date/Time Posted: {{each.formatted_time}}</p>
 
         {% for every in each.comments.all %}
 
