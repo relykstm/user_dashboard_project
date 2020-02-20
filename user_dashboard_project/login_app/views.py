@@ -25,6 +25,10 @@ def normal_dashboard(request):
 def admin_dashboard(request):
     if 'userid' not in request.session:
         return redirect('/')
+    this_user = User.objects.get(id= request.session['userid'])
+    if this_user.user_level != 9:
+        messages.error(request, "Insuficient privedges to view this page.")
+        return redirect('/signin')
     context = {
         'users': User.objects.all(),
         'user': User.objects.get(id = request.session['userid'])
@@ -86,7 +90,8 @@ def edit_a_profile(request, id):
         return redirect('/')
     this_user = User.objects.get(id= request.session['userid'])
     if this_user.user_level != 9:
-        return redirect('/')
+        messages.error(request, "Insuficient privedges to view this page.")
+        return redirect('/signin')
     context = {
         'user_profile': User.objects.get(id=id)
     }
@@ -119,6 +124,10 @@ def show_a_profile(request, id):
     return render(request, 'show_user_profile.html', context)
 
 def create_new_user_page(request):
+    this_user = User.objects.get(id= request.session['userid'])
+    if this_user.user_level != 9:
+        messages.error(request, "Insuficient privedges to view this page.")
+        return redirect('/signin')
     return render(request, 'add_new_user.html')
 
 def admin_create_user(request):
@@ -138,6 +147,10 @@ def admin_create_user(request):
         return redirect('/dashboard/admin')
 
 def delete_user(request, id):
+    this_user = User.objects.get(id= request.session['userid'])
+    if this_user.user_level != 9:
+        messages.error(request, "Insuficient privedges to perform this action.")
+        return redirect('/signin') 
     this_user = User.objects.get(id=id)
     this_user.delete()
     return redirect('/dashboard/admin')
@@ -197,29 +210,3 @@ def edit_user_info(request, id):
         this_user.user_level = 0
     this_user.save()
     return redirect('/dashboardroute')
-
-
-# this_message = Message.objects.get(id=id)
-
-
-# if this_message.created_at > age_check:
-#     this.message.delete()
-
-# hour_check = datetime.now().replace(tzinfo=timezone.utc) - timedelta(hours=1)
-
-# posts_older_than_1_hour = posts.objects.filter(created_at__gte, hour_check)
-
-# for posts in posts_older_than_1_hour:
-#     posts.formatted_time = strftime("%I:%M %p", posts.created_at)
-#     posts.objects.save()
-
-#     context = {
-#         'hour_posts':posts_older_than_1_hour
-#     }
-
-
-#     {{posts.formatted_time}}
-
-#     context = {
-#         hourposts: posts.objects.filter(created_at__gte, hour_check)
-#     }
